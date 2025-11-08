@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" data-api-base="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinic Queue</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="logo">
+      <span class="logo-icon">🩺</span>
+      <div>
+        <h1>ClinicQueue</h1>
+        <p>Smart Token Management</p>
+      </div>
+    </div>
+    <div class="status-pill" id="connection-status" style="display: none;">Connecting…</div>
+  </header>
+
+  <main class="container">
+    <!-- Page 1: Landing Page -->
+    <section class="page" id="landing-page">
+      <div class="card landing-card">
+        <h2>Welcome to ClinicQueue</h2>
+        <p class="card-subtitle">Choose an option to continue</p>
+        <div class="option-buttons">
+          <button class="option-btn primary" id="patient-booking-btn">
+            <span class="option-icon">👤</span>
+            <div>
+              <h3>Patient Booking</h3>
+              <p>Book your appointment token</p>
+            </div>
+          </button>
+          <button class="option-btn secondary" id="admin-booking-btn">
+            <span class="option-icon">🔐</span>
+            <div>
+              <h3>Admin Booking</h3>
+              <p>Admin login to manage patients</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page 2: Patient Booking Page -->
+    <section class="page hidden" id="patient-page">
+      <div class="card">
+        <div class="page-header">
+          <button class="back-btn" id="back-to-landing-from-patient">← Back</button>
+          <h2>Patient Booking</h2>
+        </div>
+        <p class="card-subtitle">Enter your details to join the queue.</p>
+        
+        <!-- Queue Status -->
+        <section class="queue-status-section">
+          <h3>Queue Status</h3>
+          <div class="status-grid">
+            <article class="status-tile">
+              <h4>Now Serving</h4>
+              <p class="status-number" id="patient-now-serving">0</p>
+              <span class="status-caption">Please proceed to counter</span>
+            </article>
+            <article class="status-tile">
+              <h4>In Queue</h4>
+              <p class="status-number" id="patient-in-queue">0</p>
+              <span class="status-caption">Patients waiting</span>
+            </article>
+            <article class="status-tile">
+              <h4>Estimated Waiting Time</h4>
+              <p class="status-number" id="patient-estimated-wait">0</p>
+              <span class="status-caption">Minutes</span>
+            </article>
+          </div>
+        </section>
+
+        <form id="booking-form" autocomplete="off">
+          <label class="field">
+            <span>Full Name</span>
+            <input type="text" id="name" name="name" placeholder="Jane Doe" required />
+          </label>
+          <label class="field">
+            <span>Phone Number</span>
+            <input type="tel" id="phone" name="phone" placeholder="9876543210" required />
+          </label>
+          <label class="field">
+            <span>Age</span>
+            <input type="number" id="age" name="age" min="0" max="150" placeholder="30" required />
+          </label>
+          <label class="field">
+            <span>Department</span>
+            <select id="department" name="department" required>
+              <option value="" disabled selected>Select department</option>
+              <option>General Medicine</option>
+              <option>Cardiology</option>
+              <option>Orthopedics</option>
+              <option>Dermatology</option>
+              <option>Pediatrics</option>
+              <option>ENT</option>
+              <option>Ophthalmology</option>
+              <option value="others">Others</option>
+            </select>
+          </label>
+          <label class="field hidden" id="custom-department-field">
+            <span>Specify Department</span>
+            <input type="text" id="custom-department" name="customDepartment" placeholder="Physiotherapy" />
+          </label>
+          <button class="primary" type="submit" id="book-token-btn">Book Token</button>
+          <p class="helper-text" id="estimated-wait-info"></p>
+        </form>
+        <div class="alert" id="booking-alert" hidden></div>
+      </div>
+    </section>
+
+    <!-- Page 3: Admin Login Page -->
+    <section class="page hidden" id="admin-login-page">
+      <div class="card">
+        <div class="page-header">
+          <button class="back-btn" id="back-to-landing-from-admin">← Back</button>
+          <h2>Admin Login</h2>
+        </div>
+        <p class="card-subtitle">Enter your credentials to access the admin panel.</p>
+        <form id="admin-login-form" autocomplete="on">
+          <label class="field">
+            <span>Username</span>
+            <input type="text" id="admin-username" name="username" autocomplete="username" tabindex="1" required />
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input type="password" id="admin-password" name="password" autocomplete="current-password" tabindex="2" required />
+          </label>
+          <button class="secondary" type="submit" tabindex="3">Log In</button>
+          <div class="alert" id="admin-alert" hidden></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Page 4: Admin Dashboard Page -->
+    <section class="page hidden" id="admin-dashboard-page">
+      <div class="card">
+        <div class="page-header">
+          <button class="back-btn" id="admin-logout-btn">← Log Out</button>
+          <h2>Admin Dashboard</h2>
+        </div>
+        <p class="card-subtitle">Enter patient details in the clinic.</p>
+
+        <!-- Queue Status -->
+        <section class="queue-status-section">
+          <h3>Queue Status</h3>
+          <div class="status-grid">
+            <article class="status-tile">
+              <h4>Now Serving</h4>
+              <p class="status-number" id="admin-now-serving">0</p>
+              <span class="status-caption">Please proceed to counter</span>
+            </article>
+            <article class="status-tile">
+              <h4>In Queue</h4>
+              <p class="status-number" id="admin-in-queue">0</p>
+              <span class="status-caption">Patients waiting</span>
+            </article>
+            <article class="status-tile">
+              <h4>Estimated Waiting Time</h4>
+              <p class="status-number" id="admin-estimated-wait">0</p>
+              <span class="status-caption">Minutes</span>
+            </article>
+          </div>
+        </section>
+
+        <!-- Admin can enter patient details form -->
+        <form id="admin-patient-form" autocomplete="off">
+          <h3>Add New Patient</h3>
+          <label class="field">
+            <span>Full Name</span>
+            <input type="text" id="admin-name" name="name" placeholder="Jane Doe" required />
+          </label>
+          <label class="field">
+            <span>Phone Number</span>
+            <input type="tel" id="admin-phone" name="phone" placeholder="9876543210" required />
+          </label>
+          <label class="field">
+            <span>Age</span>
+            <input type="number" id="admin-age" name="age" min="0" max="150" placeholder="30" required />
+          </label>
+          <label class="field">
+            <span>Department</span>
+            <select id="admin-department" name="department" required>
+              <option value="" disabled selected>Select department</option>
+              <option>General Medicine</option>
+              <option>Cardiology</option>
+              <option>Orthopedics</option>
+              <option>Dermatology</option>
+              <option>Pediatrics</option>
+              <option>ENT</option>
+              <option>Ophthalmology</option>
+              <option value="others">Others</option>
+            </select>
+          </label>
+          <label class="field hidden" id="admin-custom-department-field">
+            <span>Specify Department</span>
+            <input type="text" id="admin-custom-department" name="customDepartment" placeholder="Physiotherapy" />
+          </label>
+          <button class="primary" type="submit" id="admin-book-token-btn">Add Patient</button>
+          <div class="alert" id="admin-patient-alert" hidden></div>
+        </form>
+
+        <!-- Admin Controls -->
+        <div class="admin-controls-section">
+          <h3>Queue Management</h3>
+          <div class="admin-controls">
+            <div>
+              <span class="admin-label">Current Number</span>
+              <strong id="admin-current">0</strong>
+            </div>
+            <div>
+              <span class="admin-label">Waiting</span>
+              <strong id="admin-waiting">0</strong>
+            </div>
+            <div class="admin-actions">
+              <button class="primary" id="next-number-btn">Call Next Patient</button>
+              <button class="danger" id="reset-queue-btn">Reset Queue</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming Patients List -->
+        <div class="list" id="upcoming-patients">
+          <h3>Upcoming Patients</h3>
+          <p class="card-subtitle" id="upcoming-empty">No patients waiting.</p>
+          <ul id="upcoming-list"></ul>
+        </div>
+
+        <!-- Recent Tokens Table -->
+        <div class="token-history-section">
+          <h3>Recent Tokens</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Department</th>
+                  <th>Booked At</th>
+                </tr>
+              </thead>
+              <tbody id="token-table"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <small>&copy; <span id="year"></span> ClinicQueue. All rights reserved.</small>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
