@@ -35,13 +35,20 @@
     adminCurrent: document.getElementById("admin-current"),
     adminWaiting: document.getElementById("admin-waiting"),
     adminLogoutBtn: document.getElementById("admin-logout-btn"),
+    adminHomeBtn: document.getElementById("admin-home-btn"),
     nextNumberBtn: document.getElementById("next-number-btn"),
     resetQueueBtn: document.getElementById("reset-queue-btn"),
     upcomingList: document.getElementById("upcoming-list"),
     upcomingEmpty: document.getElementById("upcoming-empty"),
+    visitedList: document.getElementById("visited-list"),
+    visitedEmpty: document.getElementById("visited-empty"),
     // New UI elements
     patientBookingBtn: document.getElementById("patient-booking-btn"),
     adminBookingBtn: document.getElementById("admin-booking-btn"),
+    adminBookingPatientBtn: document.getElementById("admin-booking-patient-btn"),
+    adminVisitedPatientsBtn: document.getElementById("admin-visited-patients-btn"),
+    adminUpcomingPatientsBtn: document.getElementById("admin-upcoming-patients-btn"),
+    adminFormsContainer: document.getElementById("admin-forms-container"),
     backToLandingFromPatient: document.getElementById("back-to-landing-from-patient"),
     backToLandingFromAdmin: document.getElementById("back-to-landing-from-admin"),
     adminPatientForm: document.getElementById("admin-patient-form"),
@@ -51,6 +58,9 @@
     adminCustomDepartmentField: document.getElementById("admin-custom-department-field"),
     adminCustomDepartment: document.getElementById("admin-custom-department"),
     // Queue status elements
+    landingNowServing: document.getElementById("landing-now-serving"),
+    landingInQueue: document.getElementById("landing-in-queue"),
+    landingEstimatedWait: document.getElementById("landing-estimated-wait"),
     patientNowServing: document.getElementById("patient-now-serving"),
     patientInQueue: document.getElementById("patient-in-queue"),
     patientEstimatedWait: document.getElementById("patient-estimated-wait"),
@@ -112,6 +122,33 @@
   function navigateToAdminDashboard() {
     showPage("adminDashboard");
     fetchQueue();
+    // Hide all admin sections initially
+    if (ui.adminFormsContainer) {
+      ui.adminFormsContainer.classList.add("hidden");
+    }
+  }
+
+  function showAdminSection(section) {
+    if (!ui.adminFormsContainer) return;
+    
+    // Show the container
+    ui.adminFormsContainer.classList.remove("hidden");
+    
+    // Hide all sections
+    const sections = ui.adminFormsContainer.querySelectorAll(".admin-form-section");
+    sections.forEach(sec => sec.classList.add("hidden"));
+    
+    // Show the selected section
+    if (section === "booking") {
+      const bookingForm = document.getElementById("admin-patient-form");
+      if (bookingForm) bookingForm.classList.remove("hidden");
+    } else if (section === "visited") {
+      const visitedSection = document.getElementById("visited-patients");
+      if (visitedSection) visitedSection.classList.remove("hidden");
+    } else if (section === "upcoming") {
+      const upcomingSection = document.getElementById("upcoming-patients");
+      if (upcomingSection) upcomingSection.classList.remove("hidden");
+    }
   }
 
   function setConnectionStatus(text, isError = false) {
@@ -151,6 +188,11 @@
     const waitingCount = waitingTokens.length;
     const displayCurrent = state.tokens.length > 0 ? Math.max(state.currentNumber - 1, 0) : 0;
     const estimatedMinutes = waitingCount * 5;
+
+    // Update landing page queue status
+    if (ui.landingNowServing) ui.landingNowServing.textContent = displayCurrent;
+    if (ui.landingInQueue) ui.landingInQueue.textContent = waitingCount;
+    if (ui.landingEstimatedWait) ui.landingEstimatedWait.textContent = estimatedMinutes;
 
     // Update patient page queue status
     if (ui.patientNowServing) ui.patientNowServing.textContent = displayCurrent;
@@ -472,6 +514,31 @@
       ui.adminLogoutBtn.addEventListener("click", () => {
         state.adminLoggedIn = false;
         navigateToLanding();
+      });
+    }
+
+    if (ui.adminHomeBtn) {
+      ui.adminHomeBtn.addEventListener("click", () => {
+        navigateToLanding();
+      });
+    }
+
+    // Admin dashboard section buttons
+    if (ui.adminBookingPatientBtn) {
+      ui.adminBookingPatientBtn.addEventListener("click", () => {
+        showAdminSection("booking");
+      });
+    }
+
+    if (ui.adminVisitedPatientsBtn) {
+      ui.adminVisitedPatientsBtn.addEventListener("click", () => {
+        showAdminSection("visited");
+      });
+    }
+
+    if (ui.adminUpcomingPatientsBtn) {
+      ui.adminUpcomingPatientsBtn.addEventListener("click", () => {
+        showAdminSection("upcoming");
       });
     }
 

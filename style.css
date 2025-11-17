@@ -1,9 +1,9 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  --bg: #f5f7fb;
+  --bg: #e0f2fe;
   --bg-dark: #121417;
-  --card: #ffffff;
+  --card: rgba(255, 255, 255, 0.9);
   --card-dark: #1f232a;
   --text: #1a1d21;
   --text-dark: #f4f5f7;
@@ -16,23 +16,36 @@
   --border: rgba(148, 163, 184, 0.4);
   --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
   --max-width: 1100px;
+  --light-blue: #bae6fd;
+  --status-blue: #3b82f6;
+  --status-green: #10b981;
+  --status-orange: #f59e0b;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html, body {
+html {
   margin: 0;
   min-height: 100%;
-  background: var(--bg);
-  color: var(--text);
+  background-color: var(--bg);
 }
 
 body {
+  margin: 0;
+  min-height: 100%;
+  color: var(--text);
+  position: relative;
+  background: transparent;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  z-index: 1;
+}
+
+body::before {
+  display: none;
 }
 
 body.dark {
@@ -44,13 +57,15 @@ body.dark {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem clamp(1rem, 4vw, 2.5rem);
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(59, 130, 246, 0.7));
-  color: #fff;
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  color: var(--text);
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .logo {
@@ -61,7 +76,7 @@ body.dark {
 
 .logo-icon {
   font-size: 2.25rem;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(59, 130, 246, 0.15);
   width: 3.25rem;
   height: 3.25rem;
   display: grid;
@@ -114,15 +129,19 @@ body.dark {
   padding: 2rem clamp(1rem, 3vw, 2rem) 4rem;
   display: grid;
   gap: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .card {
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 18px;
   padding: clamp(1.5rem, 2vw, 2rem);
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(16px);
+  position: relative;
+  z-index: 1;
 }
 
 body.dark .card {
@@ -148,20 +167,22 @@ body.dark .card {
 
 .queue-status-section h3 {
   margin: 0 0 1.5rem;
-  font-size: 1.35rem;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--text);
+  text-align: center;
 }
 
 .status-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
 .status-tile h4 {
-  margin: 0 0 0.5rem;
-  font-size: 1rem;
+  margin: 0.5rem 0 0.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--text);
 }
@@ -169,27 +190,60 @@ body.dark .card {
 .status-tile {
   padding: 1.5rem;
   border-radius: 16px;
-  background: linear-gradient(145deg, rgba(37, 99, 235, 0.08), rgba(37, 99, 235, 0));
-  border: 1px solid rgba(37, 99, 235, 0.15);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   text-align: center;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .status-tile:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 30px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.status-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.status-icon.blue-icon {
+  color: var(--status-blue);
+}
+
+.status-icon.green-icon {
+  color: var(--status-green);
+}
+
+.status-icon.orange-icon {
+  color: var(--status-orange);
 }
 
 .status-number {
   margin: 0.35rem 0 0.6rem;
   font-size: clamp(2.5rem, 5vw, 3rem);
   font-weight: 700;
-  color: var(--primary);
+}
+
+.status-tile:first-child .status-number {
+  color: var(--status-blue);
+}
+
+.status-tile:nth-child(2) .status-number {
+  color: var(--status-green);
+}
+
+.status-tile:nth-child(3) .status-number {
+  color: var(--status-orange);
 }
 
 .status-caption {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--muted);
+  margin-top: 0.5rem;
+  display: block;
 }
 
 form {
@@ -204,6 +258,17 @@ form {
 
 .field span {
   font-weight: 600;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.field-icon {
+  font-size: 1.1rem;
 }
 
 input,
@@ -223,6 +288,17 @@ select {
   position: relative;
   z-index: 2;
   cursor: text;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
 }
 
 input::placeholder {
@@ -462,62 +538,122 @@ tbody tr:hover {
   }
 }
 
-/* Landing Page */
-.landing-card {
+/* Landing Page - Queue Status */
+.queue-status-page {
   text-align: center;
-  max-width: 600px;
+  max-width: 900px;
   margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
-.option-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+.queue-status-title {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 2.5rem;
+  text-align: center;
 }
 
-.option-btn {
+.landing-buttons {
   display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding: 2rem 1.5rem;
-  text-align: left;
-  border-radius: 16px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 3rem;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.landing-btn {
   width: 100%;
-}
-
-.option-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
-}
-
-.option-icon {
-  font-size: 3rem;
-  flex-shrink: 0;
-}
-
-.option-btn h3 {
-  margin: 0 0 0.35rem;
-  font-size: 1.35rem;
-}
-
-.option-btn p {
-  margin: 0;
-  font-size: 0.95rem;
-  opacity: 0.8;
-}
-
-.option-btn.primary {
-  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--status-blue);
   color: #fff;
 }
 
-.option-btn.secondary {
-  background: rgba(37, 99, 235, 0.12);
-  color: var(--primary);
-  border: 2px solid rgba(37, 99, 235, 0.25);
+.landing-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+}
+
+.landing-btn:active {
+  transform: scale(0.98);
+}
+
+/* Booking Token Form */
+.booking-token-card {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px);
+  position: relative;
+  z-index: 1;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-icon-circle {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  background: rgba(59, 130, 246, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-icon {
+  font-size: 2.5rem;
+}
+
+.form-header h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.form-subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.book-token-btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  background: var(--status-blue);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-token-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+}
+
+.book-token-btn:active {
+  transform: scale(0.98);
 }
 
 /* Page Header with Back Button */
@@ -551,6 +687,157 @@ tbody tr:hover {
   border-color: var(--primary);
 }
 
+/* Admin Dashboard */
+#admin-dashboard-page .admin-dashboard-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+}
+
+.admin-header-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 12px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(16px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-header-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header-icon {
+  font-size: 1.1rem;
+}
+
+.admin-queue-title {
+  text-align: center;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 2.5rem;
+}
+
+.admin-action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  margin-top: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.admin-action-buttons-wrapper {
+  max-width: 800px;
+  margin: 3rem auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.admin-left-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-right-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+
+.admin-action-btn {
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #fff;
+}
+
+.admin-action-btn.blue-btn {
+  background: var(--status-blue);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.admin-action-btn.blue-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.admin-action-btn.red-btn {
+  background: var(--danger);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.admin-action-btn.red-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.4);
+}
+
+/* Make Visited Patients button same size as Call Next Patient */
+#admin-visited-patients-btn {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.admin-action-btn:active {
+  transform: scale(0.98);
+}
+
+.admin-forms-container {
+  margin-top: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.admin-form-section {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px);
+}
+
+.admin-form-section h3 {
+  margin: 0 0 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
 /* Admin Dashboard Sections */
 .admin-controls-section {
   margin: 2.5rem 0;
@@ -581,6 +868,27 @@ tbody tr:hover {
 #admin-patient-form h3 {
   margin: 0 0 1.25rem;
   font-size: 1.25rem;
+}
+
+/* Admin Login Page - Slightly Larger Box Size */
+#admin-login-page .card {
+  max-width: 580px;
+  margin: 0 auto;
+  padding: clamp(1.75rem, 2.5vw, 2.25rem);
+}
+
+#admin-login-page .field {
+  gap: 0.6rem;
+}
+
+#admin-login-page input {
+  padding: 0.8rem 0.9rem;
+  font-size: 1.05rem;
+}
+
+#admin-login-page button {
+  padding: 0.9rem 1.3rem;
+  font-size: 1.05rem;
 }
 
 @media (max-width: 600px) {
@@ -623,5 +931,14 @@ tbody tr:hover {
 
   .back-btn {
     align-self: flex-start;
+  }
+
+  .admin-action-buttons {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .admin-header {
+    justify-content: center;
   }
 }
