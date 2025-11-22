@@ -11,6 +11,8 @@
     pollingHandle: null,
     adminLoggedIn: false,
     currentPage: "landing",
+    // Track if patient page was opened from admin dashboard
+    returnToAdminFromPatient: false,
   };
 
   const pages = {
@@ -18,6 +20,8 @@
     patient: document.getElementById("patient-page"),
     adminLogin: document.getElementById("admin-login-page"),
     adminDashboard: document.getElementById("admin-dashboard-page"),
+    upcoming: document.getElementById("upcoming-page"),
+    visited: document.getElementById("visited-page"),
   };
 
   const ui = {
@@ -51,6 +55,8 @@
     adminFormsContainer: document.getElementById("admin-forms-container"),
     backToLandingFromPatient: document.getElementById("back-to-landing-from-patient"),
     backToLandingFromAdmin: document.getElementById("back-to-landing-from-admin"),
+    backToAdminFromUpcoming: document.getElementById("back-to-admin-from-upcoming"),
+    backToAdminFromVisited: document.getElementById("back-to-admin-from-visited"),
     adminPatientForm: document.getElementById("admin-patient-form"),
     adminPatientAlert: document.getElementById("admin-patient-alert"),
     adminBookTokenBtn: document.getElementById("admin-book-token-btn"),
@@ -122,34 +128,9 @@
   function navigateToAdminDashboard() {
     showPage("adminDashboard");
     fetchQueue();
-    // Hide all admin sections initially
-    if (ui.adminFormsContainer) {
-      ui.adminFormsContainer.classList.add("hidden");
-    }
   }
 
-  function showAdminSection(section) {
-    if (!ui.adminFormsContainer) return;
-    
-    // Show the container
-    ui.adminFormsContainer.classList.remove("hidden");
-    
-    // Hide all sections
-    const sections = ui.adminFormsContainer.querySelectorAll(".admin-form-section");
-    sections.forEach(sec => sec.classList.add("hidden"));
-    
-    // Show the selected section
-    if (section === "booking") {
-      const bookingForm = document.getElementById("admin-patient-form");
-      if (bookingForm) bookingForm.classList.remove("hidden");
-    } else if (section === "visited") {
-      const visitedSection = document.getElementById("visited-patients");
-      if (visitedSection) visitedSection.classList.remove("hidden");
-    } else if (section === "upcoming") {
-      const upcomingSection = document.getElementById("upcoming-patients");
-      if (upcomingSection) upcomingSection.classList.remove("hidden");
-    }
-  }
+  // Admin sections are now separate pages; admin dashboard always shows booking + recent tokens
 
   function setConnectionStatus(text, isError = false) {
     if (!ui.connectionStatus) return;
@@ -175,6 +156,10 @@
     return state.tokens.filter((token) => token.tokenNumber >= state.currentNumber);
   }
 
+  function getVisitedTokens() {
+    return state.tokens.filter((token) => token.tokenNumber < state.currentNumber);
+  }
+
   function formatTime(value) {
     try {
       return new Date(value).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -185,6 +170,7 @@
 
   function updateQueueView() {
     const waitingTokens = getWaitingTokens();
+    const visitedTokens = getVisitedTokens();
     const waitingCount = waitingTokens.length;
     const displayCurrent = state.tokens.length > 0 ? Math.max(state.currentNumber - 1, 0) : 0;
     const estimatedMinutes = waitingCount * 5;
@@ -214,6 +200,7 @@
 
     updateTokenTable();
     updateAdminView();
+    renderVisited(visitedTokens);
   }
 
   function updateTokenTable() {
@@ -286,6 +273,38 @@
     });
 
     ui.upcomingList.appendChild(fragment);
+  }
+
+  function renderVisited(visitedTokens) {
+    if (!ui.visitedList || !ui.visitedEmpty) return;
+
+    ui.visitedList.textContent = "";
+
+    if (visitedTokens.length === 0) {
+      ui.visitedEmpty.classList.remove("hidden");
+      return;
+    }
+
+    ui.visitedEmpty.classList.add("hidden");
+    const fragment = document.createDocumentFragment();
+
+    visitedTokens
+      .slice(-20) // show last 20 visited patients
+      .reverse()
+      .forEach((token) => {
+        const item = document.createElement("li");
+        item.innerHTML = `
+          <header>
+            <span>Token #${token.tokenNumber}</span>
+            <span>${formatTime(token.bookedAt)}</span>
+          </header>
+          <div>${token.name ?? "Patient"}</div>
+          <span>${token.department ?? "General"}${token.age ? ` • Age: ${token.age}` : ""}</span>
+        `;
+        fragment.appendChild(item);
+      });
+
+    ui.visitedList.appendChild(fragment);
   }
 
   async function fetchQueue() {
@@ -436,11 +455,28 @@
     }
 
     if (ui.backToLandingFromPatient) {
-      ui.backToLandingFromPatient.addEventListener("click", navigateToLanding);
+      ui.backToLandingFromPatient.addEventListener("click", () => {
+        if (state.returnToAdminFromPatient && state.adminLoggedIn) {
+          // If patient page was opened from admin dashboard, go back there
+          state.returnToAdminFromPatient = false;
+          navigateToAdminDashboard();
+        } else {
+          // Default: go back to landing page
+          navigateToLanding();
+        }
+      });
     }
 
     if (ui.backToLandingFromAdmin) {
       ui.backToLandingFromAdmin.addEventListener("click", navigateToLanding);
+    }
+
+    if (ui.backToAdminFromUpcoming) {
+      ui.backToAdminFromUpcoming.addEventListener("click", navigateToAdminDashboard);
+    }
+
+    if (ui.backToAdminFromVisited) {
+      ui.backToAdminFromVisited.addEventListener("click", navigateToAdminDashboard);
     }
 
     // Department dropdown handlers
@@ -526,19 +562,21 @@
     // Admin dashboard section buttons
     if (ui.adminBookingPatientBtn) {
       ui.adminBookingPatientBtn.addEventListener("click", () => {
-        showAdminSection("booking");
+        // Mark that patient page was opened from admin dashboard
+        state.returnToAdminFromPatient = true;
+        navigateToPatient();
       });
     }
 
     if (ui.adminVisitedPatientsBtn) {
       ui.adminVisitedPatientsBtn.addEventListener("click", () => {
-        showAdminSection("visited");
+        showPage("visited");
       });
     }
 
     if (ui.adminUpcomingPatientsBtn) {
       ui.adminUpcomingPatientsBtn.addEventListener("click", () => {
-        showAdminSection("upcoming");
+        showPage("upcoming");
       });
     }
 

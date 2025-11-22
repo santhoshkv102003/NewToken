@@ -740,22 +740,13 @@ tbody tr:hover {
   margin: 0 0 2.5rem;
 }
 
-.admin-action-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 2rem;
-  margin-top: 3rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.admin-action-buttons-wrapper {
+.admin-actions-layout {
   max-width: 800px;
   margin: 3rem auto 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.1fr 1fr;
   gap: 2rem;
+  align-items: center;
 }
 
 .admin-left-buttons {
@@ -766,11 +757,8 @@ tbody tr:hover {
 
 .admin-right-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: stretch;
+  justify-content: center;
 }
-
 
 .admin-action-btn {
   width: 100%;
@@ -933,9 +921,13 @@ tbody tr:hover {
     align-self: flex-start;
   }
 
-  .admin-action-buttons {
+  .admin-actions-layout {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+
+  .admin-right-buttons {
+    justify-content: stretch;
   }
 
   .admin-header {

@@ -175,7 +175,7 @@
         </div>
 
         <!-- Admin Action Buttons -->
-        <div class="admin-action-buttons-wrapper">
+        <div class="admin-actions-layout">
           <div class="admin-left-buttons">
             <button class="admin-action-btn blue-btn" id="admin-booking-patient-btn">Patient Booking</button>
             <button class="admin-action-btn blue-btn" id="admin-visited-patients-btn">Visited Patients</button>
@@ -185,78 +185,30 @@
             <button class="admin-action-btn red-btn" id="next-number-btn">Call Next Patient</button>
           </div>
         </div>
-
+      
         <!-- Hidden forms and sections -->
-        <div class="admin-forms-container hidden" id="admin-forms-container">
-          <!-- Admin can enter patient details form -->
-          <form id="admin-patient-form" autocomplete="off" class="admin-form-section hidden">
-            <h3>Add New Patient</h3>
-            <label class="field">
-              <span>Full Name</span>
-              <input type="text" id="admin-name" name="name" placeholder="Jane Doe" required />
-            </label>
-            <label class="field">
-              <span>Phone Number</span>
-              <input type="tel" id="admin-phone" name="phone" placeholder="9876543210" required />
-            </label>
-            <label class="field">
-              <span>Age</span>
-              <input type="number" id="admin-age" name="age" min="0" max="150" placeholder="30" required />
-            </label>
-            <label class="field">
-              <span>Department</span>
-              <select id="admin-department" name="department" required>
-                <option value="" disabled selected>Select department</option>
-                <option>General Medicine</option>
-                <option>Cardiology</option>
-                <option>Orthopedics</option>
-                <option>Dermatology</option>
-                <option>Pediatrics</option>
-                <option>ENT</option>
-                <option>Ophthalmology</option>
-                <option value="others">Others</option>
-              </select>
-            </label>
-            <label class="field hidden" id="admin-custom-department-field">
-              <span>Specify Department</span>
-              <input type="text" id="admin-custom-department" name="customDepartment" placeholder="Physiotherapy" />
-            </label>
-            <button class="primary" type="submit" id="admin-book-token-btn">Add Patient</button>
-            <div class="alert" id="admin-patient-alert" hidden></div>
-          </form>
-
-          <!-- Upcoming Patients List -->
-          <div class="list admin-form-section hidden" id="upcoming-patients">
-            <h3>Upcoming Patients</h3>
-            <p class="card-subtitle" id="upcoming-empty">No patients waiting.</p>
-            <ul id="upcoming-list"></ul>
-          </div>
-
-          <!-- Visited Patients List -->
-          <div class="list admin-form-section hidden" id="visited-patients">
-            <h3>Visited Patients</h3>
-            <p class="card-subtitle" id="visited-empty">No visited patients yet.</p>
-            <ul id="visited-list"></ul>
-          </div>
-
-          <!-- Recent Tokens Table -->
-          <div class="token-history-section admin-form-section">
-            <h3>Recent Tokens</h3>
-            <div class="table-wrapper">
-              <table>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Booked At</th>
-                  </tr>
-                </thead>
-                <tbody id="token-table"></tbody>
-              </table>
-            </div>
-          </div>
+        <div class="admin-forms-container" id="admin-forms-container">
         </div>
+      </div>
+    </section>
+
+    <!-- Page 5: Upcoming Patients Page -->
+    <section class="page hidden" id="upcoming-page">
+      <button class="secondary" type="button" id="back-to-admin-from-upcoming">Back</button>
+      <div class="list">
+        <h3>Upcoming Patients</h3>
+        <p class="card-subtitle" id="upcoming-empty">No patients waiting.</p>
+        <ul id="upcoming-list"></ul>
+      </div>
+    </section>
+
+    <!-- Page 6: Visited Patients Page -->
+    <section class="page hidden" id="visited-page">
+      <button class="secondary" type="button" id="back-to-admin-from-visited">Back</button>
+      <div class="list">
+        <h3>Visited Patients</h3>
+        <p class="card-subtitle" id="visited-empty">No visited patients yet.</p>
+        <ul id="visited-list"></ul>
       </div>
     </section>
   </main>
