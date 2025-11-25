@@ -233,11 +233,11 @@ body.dark .card {
 }
 
 .status-tile:nth-child(2) .status-number {
-  color: var(--status-green);
+  color: var(--status-blue);
 }
 
 .status-tile:nth-child(3) .status-number {
-  color: var(--status-orange);
+  color: var(--status-blue);
 }
 
 .status-caption {
@@ -591,14 +591,13 @@ tbody tr:hover {
 .booking-token-card {
   max-width: 500px;
   margin: 2rem auto;
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 20px;
-  padding: 2.5rem 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(16px);
+  background: #ADD8E6;
+  color: #032B44;
   position: relative;
-  z-index: 1;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(15, 23, 42, 0.1);
 }
 
 .form-header {
@@ -774,7 +773,7 @@ tbody tr:hover {
 }
 
 .admin-action-btn.blue-btn {
-  background: var(--status-blue);
+  background-color: #3B82F6;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
@@ -811,9 +810,12 @@ tbody tr:hover {
 }
 
 .admin-form-section {
-  background: rgba(255, 255, 255, 0.85);
+  background: #E0F2FE;
+  color: #0F172A;
   border-radius: 16px;
   padding: 2rem;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.5);
