@@ -861,6 +861,30 @@ tbody tr:hover {
   font-size: 1.25rem;
 }
 
+/* Visited and Upcoming Patients Sections */
+#visited-page .list,
+#upcoming-page .list {
+  background-color: #ffffffB3;
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 1rem auto;
+  max-width: 800px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#visited-page .list h3,
+#upcoming-page .list h3 {
+  margin-top: 0;
+  color: #0F172A;
+  font-size: 1.5rem;
+}
+
+#visited-page .card-subtitle,
+#upcoming-page .card-subtitle {
+  color: #64748B;
+  margin: 0.5rem 0 1.5rem;
+}
+
 /* Admin Login Page - Slightly Larger Box Size */
 #admin-login-page .card {
   max-width: 580px;
