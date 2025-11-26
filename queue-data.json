@@ -1,0 +1,51 @@
+{
+  "tokens": [
+    {
+      "tokenNumber": 1,
+      "name": "wqd",
+      "phone": "1",
+      "age": 1,
+      "department": "Pediatrics",
+      "bookedAt": "2025-11-26T16:22:51.525Z",
+      "visited": true
+    },
+    {
+      "tokenNumber": 2,
+      "name": "sdg",
+      "phone": "3",
+      "age": 32,
+      "department": "Orthopedics",
+      "bookedAt": "2025-11-26T16:23:41.118Z",
+      "visited": true
+    },
+    {
+      "tokenNumber": 3,
+      "name": "sda",
+      "phone": "21",
+      "age": 2,
+      "department": "Pediatrics",
+      "bookedAt": "2025-11-26T16:29:56.211Z",
+      "visited": false
+    },
+    {
+      "tokenNumber": 4,
+      "name": "2e",
+      "phone": "2",
+      "age": 2,
+      "department": "Orthopedics",
+      "bookedAt": "2025-11-26T16:30:08.499Z",
+      "visited": false
+    },
+    {
+      "tokenNumber": 5,
+      "name": "w",
+      "phone": "de",
+      "age": 21,
+      "department": "Dermatology",
+      "bookedAt": "2025-11-26T16:30:42.900Z",
+      "visited": false
+    }
+  ],
+  "currentNumber": 3,
+  "nextTokenNumber": 6
+}

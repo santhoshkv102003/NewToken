@@ -309,16 +309,46 @@
 
   async function fetchQueue() {
     try {
-      const response = await fetch(`${API_BASE}/api/queue`, { cache: "no-store" });
+      const response = await fetch(`${API_BASE}/api/queue`);
       if (!response.ok) throw new Error("Failed to fetch queue");
+
       const data = await response.json();
-      state.tokens = Array.isArray(data.tokens) ? data.tokens : [];
-      state.currentNumber = typeof data.currentNumber === "number" ? data.currentNumber : 1;
-      setConnectionStatus("Online", false);
+      state.tokens = data.tokens || [];
+      state.currentNumber = data.currentNumber || 1;
+
+      // Always update all views regardless of current page
       updateQueueView();
+      updateTokenTable();
+      updateAdminView();
+
+      // Force update the landing page counters if they exist
+      const waitingTokens = getWaitingTokens();
+      const waitingCount = waitingTokens.length;
+      const displayCurrent = state.tokens.length > 0 ? Math.max(state.currentNumber - 1, 0) : 0;
+      const estimatedMinutes = waitingCount * 5;
+
+      // Update all counter displays
+      const counterUpdates = [
+        { element: ui.landingNowServing, value: displayCurrent },
+        { element: ui.landingInQueue, value: waitingCount },
+        { element: ui.landingEstimatedWait, value: estimatedMinutes },
+        { element: ui.patientNowServing, value: displayCurrent },
+        { element: ui.patientInQueue, value: waitingCount },
+        { element: ui.patientEstimatedWait, value: estimatedMinutes },
+        { element: ui.adminNowServing, value: displayCurrent },
+        { element: ui.adminInQueue, value: waitingCount },
+        { element: ui.adminEstimatedWait, value: estimatedMinutes }
+      ];
+
+      counterUpdates.forEach(({ element, value }) => {
+        if (element) element.textContent = value;
+      });
+
+      return true;
     } catch (error) {
-      console.error(error);
+      console.error("Error in fetchQueue:", error);
       setConnectionStatus("Offline", true);
+      return false;
     }
   }
 
@@ -343,15 +373,26 @@
       }
 
       const token = await response.json();
-      showAlert(alert, `Token booked successfully! Patient number is #${token.tokenNumber}.`);
+      showAlert(alert, `Token #${token.tokenNumber} booked successfully!`);
       alert.classList.remove("error");
+      
+      // Reset form but stay on the same page
       if (form) form.reset();
+      
+      // Hide custom department field if shown
       if (isAdmin && ui.adminCustomDepartmentField) {
         ui.adminCustomDepartmentField.classList.add("hidden");
       } else if (!isAdmin && ui.customDepartmentField) {
         ui.customDepartmentField.classList.add("hidden");
       }
+      
+      // Refresh queue data for all pages
       await fetchQueue();
+      
+      // If in admin mode, ensure we stay on the admin dashboard
+      if (isAdmin && state.adminLoggedIn) {
+        navigateToAdminDashboard();
+      }
     } catch (error) {
       console.error(error);
       showAlert(alert, error.message || "Unable to book token. Please try again.", "error");

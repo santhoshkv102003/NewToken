@@ -54,7 +54,7 @@ app.get("/api/queue", (req, res) => {
 });
 
 // POST /api/book-token - create a new token
-app.post("/api/book-token", (req, res) => {
+app.post("/api/book-token", async (req, res) => {
   try {
     const { name, phone, age, department, bookedAt } = req.body || {};
 
