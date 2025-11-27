@@ -658,10 +658,52 @@
     }
   }
 
+  async function resetQueue() {
+    if (!confirm('Are you sure you want to reset the queue? This will clear all patient data and cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/api/reset-queue`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to reset queue');
+      }
+      
+      // Refresh the queue data
+      await fetchQueue();
+      
+      // Show success message
+      showAlert(ui.adminAlert, 'Queue has been reset successfully', 'success');
+      
+      // If on landing page, update the view
+      if (state.currentPage === 'landing') {
+        updateQueueView();
+      }
+      
+    } catch (error) {
+      console.error('Error resetting queue:', error);
+      showAlert(ui.adminAlert, error.message || 'Failed to reset queue', 'error');
+    }
+  }
+
   function init() {
     initEventListeners();
     showPage("landing");
-    // Don't fetch queue on initial load, only when needed
+    
+    // Add reset queue button event listener
+    const resetQueueBtn = document.getElementById('reset-queue-btn');
+    if (resetQueueBtn) {
+      resetQueueBtn.addEventListener('click', resetQueue);
+    }
+    
+    // Always fetch queue data when the page loads
+    if (state.currentPage === 'landing' || state.currentPage === 'adminDashboard') {
+      fetchQueue();
+    }
   }
 
   window.addEventListener("focus", () => {

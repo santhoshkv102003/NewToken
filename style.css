@@ -802,6 +802,36 @@ tbody tr:hover {
   transform: scale(0.98);
 }
 
+/* Admin Header Buttons */
+.admin-header-btn {
+  background-color: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-header-btn:hover {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.admin-header-btn:active {
+  transform: scale(0.98);
+}
+
+.admin-header-icon {
+  font-size: 1.1em;
+}
+
 .admin-forms-container {
   margin-top: 3rem;
   max-width: 800px;

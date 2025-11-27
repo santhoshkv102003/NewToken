@@ -129,7 +129,7 @@
           </label>
           <label class="field">
             <span>Password</span>
-            <input type="password" id="admin-password" name="password" autocomplete="new-password" tabindex="2" required data-lpignore="true" data-form-type="other" />
+            <input type="password" id="admin-password" name="password" autocomplete="current-password" tabindex="2" required />
           </label>
           <button class="secondary" type="submit" tabindex="3">Log In</button>
           <div class="alert" id="admin-alert" hidden></div>
@@ -141,14 +141,22 @@
     <section class="page hidden" id="admin-dashboard-page">
       <div class="admin-dashboard-page">
         <!-- Admin Header -->
-        <div class="admin-header">
-          <button class="admin-header-btn" id="admin-home-btn">
-            <span class="admin-header-icon">🏠</span>
-            Home
-          </button>
-          <button class="admin-header-btn" id="admin-logout-btn">
-            Logout
-          </button>
+        <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <button class="admin-action-btn red-btn" id="reset-queue-btn" style="margin-right: 10px;">
+              <span class="admin-header-icon">🔄</span>
+              Reset Queue
+            </button>
+          </div>
+          <div>
+            <button class="admin-header-btn" id="admin-home-btn" style="margin-right: 10px;">
+              <span class="admin-header-icon">🏠</span>
+              Home
+            </button>
+            <button class="admin-header-btn" id="admin-logout-btn">
+              Logout
+            </button>
+          </div>
         </div>
 
         <!-- Queue Status -->
